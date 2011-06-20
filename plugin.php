@@ -72,7 +72,7 @@ add_plugin_hook('admin_theme_header', 'power_of_place_admin_header');
 function power_of_place_page_nav($html, $exhibitSection, $linkTextType)
 {
     $html = '<ul class="exhibit-page-nav">' . "\n";
-    $html .= '<li>'.exhibit_builder_link_to_exhibit(exhibit_builder_get_current_exhibit(), 'Home').'</li>';
+    $html .= '<li class="summary-link">'.exhibit_builder_link_to_exhibit(exhibit_builder_get_current_exhibit(), 'Home').'</li>';
     foreach ($exhibitSection->Pages as $exhibitPage) {
         switch($linkTextType) {
             case 'order':
@@ -91,3 +91,19 @@ function power_of_place_page_nav($html, $exhibitSection, $linkTextType)
     return $html;
 }
 add_filter('exhibit_builder_page_nav', 'power_of_place_page_nav');
+
+function power_of_place_public_header($request)
+{
+    $module = $request->getModuleName();
+    $controller = $request->getControllerName();
+
+    // Check if using Exhibits controller, and add the stylesheet for general display of exhibits
+    if ($module == 'exhibit-builder' && $controller == 'exhibits') {
+        $html = '<style>'
+              . '.summary .summary-link a {font-weight:bold;}'
+              . '</style';
+        echo $html;
+    }
+}
+
+add_plugin_hook('public_theme_header', 'power_of_place_public_header');
