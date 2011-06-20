@@ -65,3 +65,29 @@ function power_of_place_admin_header($request)
 }
 
 add_plugin_hook('admin_theme_header', 'power_of_place_admin_header');
+
+/**
+ * Prepends a 'Home' link to the exhibit_builder_page_nav output.
+ */
+function power_of_place_page_nav($html, $exhibitSection, $linkTextType)
+{
+    $html = '<ul class="exhibit-page-nav">' . "\n";
+    $html .= '<li>'.exhibit_builder_link_to_exhibit(exhibit_builder_get_current_exhibit(), 'Home').'</li>';
+    foreach ($exhibitSection->Pages as $exhibitPage) {
+        switch($linkTextType) {
+            case 'order':
+                $linkText = $exhibitPage->order;
+                break;
+            case 'title':
+            default:
+                $linkText = $exhibitPage->title;
+                break;
+            
+        }
+        $html .= '<li'. (exhibit_builder_is_current_page($exhibitPage) ? ' class="current"' : '').'><a class="exhibit-page-title" href="'. html_escape(exhibit_builder_exhibit_uri($exhibitSection->Exhibit, $exhibitSection, $exhibitPage)) . '">'. html_escape($linkText) .'</a></li>' . "\n";
+    }
+    $html .= '</ul>' . "\n";
+    
+    return $html;
+}
+add_filter('exhibit_builder_page_nav', 'power_of_place_page_nav');
