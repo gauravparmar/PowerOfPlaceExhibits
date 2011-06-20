@@ -11,7 +11,7 @@ require_once PLUGIN_DIR.'/ExhibitBuilder/models/ExhibitPage.php';
 /**
  * Creates a section and pages for a new exhibit.
  */
-function add_exhibit_template_section_and_pages($exhibit)
+function power_of_place_section_and_pages($exhibit)
 {
     if ($exhibit->getSectionCount() == 0) {
         // Create a new section.
@@ -51,4 +51,17 @@ function add_exhibit_template_section_and_pages($exhibit)
 }
 
 // Add our function to the 'after_save_exhibit' hook.a
-add_plugin_hook('after_save_exhibit', 'add_exhibit_template_section_and_pages');
+add_plugin_hook('after_save_exhibit', 'power_of_place_section_and_pages');
+
+function power_of_place_admin_header($request)
+{
+    $module = $request->getModuleName();
+    $controller = $request->getControllerName();
+
+    // Check if using Exhibits controller, and add the stylesheet for general display of exhibits
+    if ($module == 'exhibit-builder' && $controller == 'exhibits') {
+        queue_css('power-of-place-exhibit-admin', 'screen');
+    }
+}
+
+add_plugin_hook('admin_theme_header', 'power_of_place_admin_header');
