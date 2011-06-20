@@ -57,10 +57,10 @@ function power_of_place_admin_header($request)
 {
     $module = $request->getModuleName();
     $controller = $request->getControllerName();
-
     // Check if using Exhibits controller, and add the stylesheet for general display of exhibits
     if ($module == 'exhibit-builder' && $controller == 'exhibits') {
         queue_css('power-of-place-exhibit-admin', 'screen');
+        queue_js('power-of-place-exhibit-admin');
     }
 }
 
